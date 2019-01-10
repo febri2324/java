@@ -1,0 +1,124 @@
+TUGAS II
+Pemrogaman Berbasis Objek Lanjut
+Anggota Kelompok :
+1.	Febri Riana Wati	(5160311033)
+2.	Angga Medis S. R	(5160311040)
+3.	Yohanniasari Putri	(5160311048)
+
+Aplikasi kalkulator dengan mengimplementasikan RMI
+a.	Calculator.java
+
+public interface Calculator 
+        		  	extends java.rmi.Remote { 
+  	  public long add(long a, long b) 
+     		  throws java.rmi.RemoteException; 
+ 
+    public long sub(long a, long b) 
+        		throws java.rmi.RemoteException; 
+ 
+ 	   public long mul(long a, long b) 
+     		   throws java.rmi.RemoteException; 
+ 
+  	  public long div(long a, long b) 
+    		    throws java.rmi.RemoteException; 
+} 
+
+b.	CalculatorClient.java
+import java.rmi.Naming; 
+import java.rmi.RemoteException; 
+import java.net.MalformedURLException; 
+import java.rmi.NotBoundException; 
+ 
+public class CalculatorClient { 
+ public static void main(String[] args) { 
+       			 try { 
+            				Calculator c = (Calculator)
+                           			Naming.lookup(
+                 "rmi://localhost/CalculatorService"); 
+            System.out.println( c.sub(4, 3) ); 
+            System.out.println( c.add(4, 5) ); 
+            System.out.println( c.mul(3, 6) ); 
+            System.out.println( c.div(9, 3) ); 
+     			   } 
+      	  catch (MalformedURLException murle) { 
+            System.out.println(); 
+            System.out.println(
+"MalformedURLException"); 
+            System.out.println(murle); 
+       			 } 
+        	catch (RemoteException re) { 
+            System.out.println(); 
+            System.out.println(
+                      			  "RemoteException"); 
+            System.out.println(re); 
+        			} 
+        catch (NotBoundException nbe) { 
+            System.out.println(); 
+            System.out.println(
+                     			  "NotBoundException"); 
+            System.out.println(nbe); 
+       			 } 
+        	catch (
+            java.lang.ArithmeticException
+                                      		ae) { 
+            System.out.println(); 
+            System.out.println(
+             "java.lang.ArithmeticException"); 
+            System.out.println(ae); 
+        			} 
+   		 } 
+       } 
+
+c.	CalculatorImpl.java
+
+public class CalculatorImpl 
+    		extends 
+     			 java.rmi.server.UnicastRemoteObject 
+    		implements Calculator { 
+ 
+   		 public CalculatorImpl() 
+     			   throws java.rmi.RemoteException { 
+     			   super(); 
+   		 } 
+ 
+  		  public long add(long a, long b) 
+        			throws java.rmi.RemoteException { 
+       			 return a + b; 
+    		} 
+ 
+  		  public long sub(long a, long b) 
+        			throws java.rmi.RemoteException { 
+        			return a - b; 
+    		} 
+ 
+   		 public long mul(long a, long b) 
+        			throws java.rmi.RemoteException { 
+       			 return a * b; 
+
+    		} 
+ 
+   		 public long div(long a, long b) 
+       			 throws java.rmi.RemoteException { 
+       			 return a / b; 
+   		 } 
+} 
+
+d.	CalculatorServer.java
+ 
+import java.rmi.Naming;
+public class CalculatorServer {
+
+   		public CalculatorServer() {
+     			try {
+      			 	Calculator c = new CalculatorImpl();
+       	Naming.rebind("rmi://localhost:1099/CalculatorService", c);
+  		   } catch (Exception e) {
+       				System.out.println("Trouble: " + e);
+     		}
+  	 }
+  	 public static void main(String args[]) {
+     	       new CalculatorServer();
+   	}
+}
+
+
